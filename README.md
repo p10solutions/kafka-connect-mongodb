@@ -1,6 +1,19 @@
 # kafka-connect-mongodb
 
 
+## Create Kafka Topic
+
+```
+
+docker exec -it connector-mongodb-kafka-1 bash
+
+kafka-topics --bootstrap-server kafka:9092 --create --topic antifraude-events --replication-factor 1 --partitions 1
+
+```
+
+
+## Create Connector MongoDB Sink
+
 ```
 
 curl --location 'http://localhost:8083/connectors' \
@@ -39,3 +52,27 @@ curl --location 'http://localhost:8083/connectors' \
   }'
 
 ```
+
+## Produce messages
+
+```
+
+kafka-console-producer --bootstrap-server kafka:9092 --topic antifraude-events
+{"CollectionName":"CollectionA","Object":{"Prop1":"XPTO","Prop2":""}}
+
+```
+
+
+## Read messages in MongoDB
+
+```
+
+docker exec -it connector-mongodb-mongo-1 mongosh
+use sales;
+db.getCollection("CollectionA").find().pretty();
+
+```
+
+
+
+
